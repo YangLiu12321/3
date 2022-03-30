@@ -316,8 +316,10 @@ public class JavaSQL {
         ResultSet rs = pstmt.executeQuery();
         // Move cursor to data
         rs.next();
+        int a = 0;
         int count = rs.getInt("count(*)");
         System.out.println("\033[3m" + tables[i] + "\033[0m" + ": " + count);
+        System.out.println(0);
       }
     } catch (Exception ex) {
       System.out.println("Error: " + ex);
