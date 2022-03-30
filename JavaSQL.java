@@ -23,8 +23,8 @@ public class JavaSQL {
   public static void main(String[] args) {
     // TODO code application logic here
     Connection con = null;
-    String dbAdress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db0";
-    String dbUsername = "Group0";
+    String dbAdress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db9";
+    String dbUsername = "Group9";
     String dbPassword = "CSCI3170";
     try {
       Class.forName("com.mysql.jdbc.Driver");
