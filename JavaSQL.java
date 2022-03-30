@@ -4,8 +4,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.*;
 
-import java.io.File;
+
 import java.io.FileNotFoundException;
 
 import java.util.Scanner;
@@ -21,27 +22,19 @@ import java.util.Date;
 public class JavaSQL {
   public static void main(String[] args) {
     // TODO code application logic here
-    Connection conn = null;
-    String url = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db0";
-    String username = "Group9";
-    String password = "CSCI3170";
+    Connection con = null;
+    String dbAdress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db9";
+    String dbUsername = "Group9";
+    String dbPassword = "CSCI3170";
     try {
       Class.forName("com.mysql.jdbc.Driver");
-      conn = DriverManager.getConnection(url, username, password);
-      Statement dropDatabase = conn.createStatement();
-      Statement createDatavase = conn.createStatement();
-      Statement stmt = conn.createStatement();
-      stmt.executeUpdate("use CSCI3170S10;");
-      main_menu(conn);
-      conn.close();
-    } catch (SQLException ex) {
+      con = DriverManager.getConnection(dbAdress, dbUsername, dbPassword);
+    } catch (ClassNotFoundException e) {
       // handle any errors
-      System.out.println("SQLException: " + ex.getMessage());
-      System.out.println("SQLState: " + ex.getSQLState());
-      System.out.println("VendorError: " + ex.getErrorCode());
-    } catch (Exception exp) {
-      if (exp != null)
-        System.out.println("Exception: " + exp.getMessage());
+      System.out.println("[Error]: Java MySQL DB Driver not found!!");
+      System.exit(0);
+    } catch (SQLException e) {
+        System.out.println(e);
     }
   }
 
