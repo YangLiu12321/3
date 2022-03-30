@@ -32,6 +32,12 @@ public class JavaSQL {
     } catch (ClassNotFoundException e) {
       // handle any errors
       System.out.println("[Error]: Java MySQL DB Driver not found!!");
+      Statement dropDatabase = con.createStatement();
+      Statement createDatavase = con.createStatement();
+      Statement stmt = con.createStatement();
+      // stmt.executeUpdate("use CSCI3170S10;");
+      main_menu(con);
+      conn.close();
       System.exit(0);
     } catch (SQLException e) {
         System.out.println(e);
