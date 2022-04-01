@@ -29,7 +29,6 @@ public class JavaSQL {
       Class.forName("com.mysql.jdbc.Driver");
       con = DriverManager.getConnection(dbAdress, dbUsername, dbPassword);
     } catch (ClassNotFoundException e) {
-      // Handle any errors
       System.out.println("[Error]: Java MySQL DB Driver not found!!");
       System.exit(0);
     } catch (SQLException e) {
@@ -114,6 +113,7 @@ public class JavaSQL {
       pstmt_create_user = conn.prepareStatement(sqlStatement_create_user);
       /* execute SQL */
 
+
       /* create table: car_category */
       String sqlStatement_create_carcategory;
       PreparedStatement pstmt_create_carcategory;
@@ -154,9 +154,9 @@ public class JavaSQL {
           + "copy_number integer not null," + "PRIMARY KEY(call_number, copy_number),"
           + "FOREIGN KEY(call_number) REFERENCES car(call_number));";
 
+
       pstmt_create_copy = conn.prepareStatement(sqlStatement_create_copy);
       /* execute SQL */
-
       /* create table: rent */
       String sqlStatement_create_rent;
       PreparedStatement pstmt_create_rent;
