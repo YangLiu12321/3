@@ -8,6 +8,7 @@ import java.sql.*;
 
 
 import java.io.FileNotFoundException;
+import java.io.File;
 
 import java.util.Scanner;
 import java.util.Date;
@@ -29,15 +30,15 @@ public class JavaSQL {
     try {
       Class.forName("com.mysql.jdbc.Driver");
       con = DriverManager.getConnection(dbAdress, dbUsername, dbPassword);
-    } catch (ClassNotFoundException e) {
-      // handle any errors
-      System.out.println("[Error]: Java MySQL DB Driver not found!!");
       Statement dropDatabase = con.createStatement();
       Statement createDatavase = con.createStatement();
       Statement stmt = con.createStatement();
       stmt.executeUpdate("use db9;");
-      main_menu(con);
+      main_menu(con); 
       con.close();
+    } catch (ClassNotFoundException e) {
+      // handle any errors
+      System.out.println("[Error]: Java MySQL DB Driver not found!!");
       System.exit(0);
     } catch (SQLException e) {
         System.out.println(e);
