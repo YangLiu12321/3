@@ -5,8 +5,7 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.*;
-
-
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.File;
 
@@ -22,7 +21,6 @@ import java.util.Date;
 
 public class JavaSQL {
   public static void main(String[] args) {
-    // TODO code application logic here
     Connection con = null;
     String dbAdress = "jdbc:mysql://projgw.cse.cuhk.edu.hk:2633/db9";
     String dbUsername = "Group9";
@@ -37,7 +35,7 @@ public class JavaSQL {
       main_menu(con); 
       con.close();
     } catch (ClassNotFoundException e) {
-      // handle any errors
+      // Handle any errors
       System.out.println("[Error]: Java MySQL DB Driver not found!!");
       System.exit(0);
     } catch (SQLException e) {
@@ -49,9 +47,9 @@ public class JavaSQL {
     int input;
     System.out.println("\n-----Main Menu-----");
     System.out.println("What kinds of operations would you like to perform?");
-    System.out.println("1. Operations for administrator");
-    System.out.println("2. Operations for library user");
-    System.out.println("3. Operations for librarian");
+    System.out.println("1. Operations for Administrator");
+    System.out.println("2. Operations for User");
+    System.out.println("3. Operations for Manager");
     System.out.println("4. Exit this program");
     Scanner scan = new Scanner(System.in);
     do {
@@ -65,7 +63,7 @@ public class JavaSQL {
     else if (input == 3)
       librarian_operation(conn);
     else if (input == 4) {
-      System.out.println("GoodBye!!!");
+      System.out.println("Thanks,bye!");
       System.exit(1);
     }
   }
@@ -76,7 +74,7 @@ public class JavaSQL {
     System.out.println("What kinds of operations would you like to perform?");
     System.out.println("1. Create all tables");
     System.out.println("2. Delete all tables");
-    System.out.println("3. Load Data");
+    System.out.println("3. Load from datafile");
     System.out.println("4. Show number of records in each table");
     System.out.println("5. Return to the main menu");
     Scanner scan = new Scanner(System.in);
@@ -99,49 +97,59 @@ public class JavaSQL {
 
   /* Create All tables */
   public static void createAllTables(Connection conn) {
-    System.out.println("Create ALL Table...\n");
     System.out.println("Processing...\n");
     try {
-      String sqlStatement_create_category;
-      PreparedStatement pstmt_create_category;
+      String sqlStatement_create_usercategory;
+      PreparedStatement pstmt_create_usercategory;
 
-      /* create table: category */
-      sqlStatement_create_category = "CREATE TABLE category(" + "id integer primary key,"
-          + "max_books integer not null," + "loan_period integer not null)";
+      /* create table: user_category */
+      sqlStatement_create_usercategory = "CREATE TABLE user_category(" + "ucid(1) integer primary key,"
+          + "max_cars integer(1) not null," + "loan_period integer(2) not null)";
 
-      pstmt_create_category = conn.prepareStatement(sqlStatement_create_category);
+      pstmt_create_usercategory = conn.prepareStatement(sqlStatement_create_usercategory);
       /* execute SQL */
 
       /* create table: user */
       String sqlStatement_create_user;
       PreparedStatement pstmt_create_user;
 
-      sqlStatement_create_user = "CREATE TABLE user(" + "user_id varchar(10) primary key,"
-          + "name varchar(25) not null," + "address varchar(100) not null," + "category_id integer not null,"
-          + "FOREIGN KEY(category_id) REFERENCES category(id))";
+      sqlStatement_create_user = "CREATE TABLE user(" + "uid varchar(12) primary key,"
+          + "name varchar(25) not null," + "age integer(2) not null" + "occupation varchar(20) not null," + "user_category_id integer not null,"
+          + "FOREIGN KEY(user_category_id) REFERENCES user_category(ucid))";
 
       pstmt_create_user = conn.prepareStatement(sqlStatement_create_user);
       /* execute SQL */
 
-      /* create table: book */
-      String sqlStatement_create_book;
-      PreparedStatement pstmt_create_book;
+      /* create table: car_category */
+      String sqlStatement_create_carcategory;
+      PreparedStatement pstmt_create_carcategory;
 
-      sqlStatement_create_book = "CREATE TABLE book(" + "call_number varchar(8) primary key,"
-          + "title varchar(30) not null," + "publish_date varchar(10) not null)";
+      sqlStatement_create_carcategory = "CREATE TABLE car_category(" + "ccid integer(1) primary key,"
+          + "car_category_name varchar(20) not null)";
 
-      pstmt_create_book = conn.prepareStatement(sqlStatement_create_book);
+      pstmt_create_carcategory = conn.prepareStatement(sqlStatement_create_carcategory);
+      /* execute SQL */
+      
+      /* create table: car */
+      String sqlStatement_create_car;
+      PreparedStatement pstmt_create_car;
+
+      sqlStatement_create_car = "CREATE TABLE car(" + "call_number varchar(8) primary key,"
+          + "car_name varchar(10) not null," + "manufacture_date varchar(10) not null," + "time_rent vaechar(2) not full"
+          + "car_category_id integer(1) not null" + "FOREIGN KEY(ccid) REFERENCES car_category(ccid))";
+
+      pstmt_create_car = conn.prepareStatement(sqlStatement_create_car);
       /* execute SQL */
 
-      /* create table: author */
-      String sqlStatement_create_author;
-      PreparedStatement pstmt_create_author;
+      /* create table: produce */
+      String sqlStatement_create_produce;
+      PreparedStatement pstmt_create_produce;
 
-      sqlStatement_create_author = "CREATE TABLE author(" + "name varchar(25) not null,"
+      sqlStatement_create_produce = "CREATE TABLE produce(" + "name varchar(25) not null,"
           + "call_number varchar(8) not null," + "PRIMARY KEY(name, call_number),"
-          + "FOREIGN KEY(call_number) REFERENCES book(call_number))";
+          + "FOREIGN KEY(call_number) REFERENCES car(call_number))";
 
-      pstmt_create_author = conn.prepareStatement(sqlStatement_create_author);
+      pstmt_create_produce = conn.prepareStatement(sqlStatement_create_produce);
       /* execute SQL */
 
       /* create table: copy */
@@ -150,31 +158,33 @@ public class JavaSQL {
 
       sqlStatement_create_copy = "CREATE TABLE copy(" + "call_number varchar(8) not null,"
           + "copy_number integer not null," + "PRIMARY KEY(call_number, copy_number),"
-          + "FOREIGN KEY(call_number) REFERENCES book(call_number));";
+          + "FOREIGN KEY(call_number) REFERENCES car(call_number));";
 
       pstmt_create_copy = conn.prepareStatement(sqlStatement_create_copy);
       /* execute SQL */
 
-      /* create table: checkout_record */
-      String sqlStatement_create_checkout_record;
-      PreparedStatement pstmt_create_checkout_record;
+      /* create table: rent */
+      String sqlStatement_create_rent;
+      PreparedStatement pstmt_create_rent;
 
-      sqlStatement_create_checkout_record = "CREATE TABLE checkout_record(" + "user_id varchar(10) not null,"
+      sqlStatement_create_rent = "CREATE TABLE rent(" + "uid varchar(10) not null,"
           + "call_number varchar(8) not null," + "copy_number integer not null," + "checkout_date varchar(10) not null,"
-          + "return_date varchar(10)," + "PRIMARY KEY(user_id, call_number, copy_number, checkout_date),"
-          + "FOREIGN KEY(user_id) REFERENCES user(user_id),"
+          + "return_date varchar(10)," + "PRIMARY KEY(uid, call_number, copy_number, checkout_date),"
+          + "FOREIGN KEY(uid) REFERENCES user(uid),"
           + "FOREIGN KEY(call_number, copy_number) REFERENCES copy(call_number, copy_number))";
 
-      pstmt_create_checkout_record = conn.prepareStatement(sqlStatement_create_checkout_record);
+      pstmt_create_rent = conn.prepareStatement(sqlStatement_create_rent);
       /* execute SQL */
-      pstmt_create_category.executeUpdate();
-      pstmt_create_user.executeUpdate();
-      pstmt_create_book.executeUpdate();
-      pstmt_create_author.executeUpdate();
-      pstmt_create_copy.executeUpdate();
-      pstmt_create_checkout_record.executeUpdate();
 
-      System.out.println("All talbes are created successfully!!!");
+      pstmt_create_usercategory.executeUpdate();
+      pstmt_create_user.executeUpdate();
+      pstmt_create_carcategory.executeUpdate();
+      pstmt_create_car.executeUpdate();
+      pstmt_create_produce.executeUpdate();
+      pstmt_create_copy.executeUpdate();
+      pstmt_create_rent.executeUpdate();
+
+      System.out.println("Done. Database is initialized");
     } catch (Exception ex) {
       System.out.println("Error: " + ex);
     }
@@ -298,7 +308,7 @@ public class JavaSQL {
 
   public static void dropAllTable(Connection conn) {
     System.out.println("Processing...");
-    String[] tables = { "category", "user", "book", "copy", "checkout_record", "author" };
+    String[] tables = { "user_category", "user", "car", "copy", "rent", "car_category","produce" };
     String sqlStatement = "DROP TABLE IF EXISTS  ";
     try {
       for (int i = 0; i < tables.length; i++) {
@@ -306,7 +316,7 @@ public class JavaSQL {
         PreparedStatement pstmt = conn.prepareStatement(temp);
         pstmt.executeUpdate();
       }
-      System.out.println("Done! Tables are removed!");
+      System.out.println("Done. Database is removed!");
     } catch (Exception ex) {
       System.out.println("Error: " + ex);
     }
