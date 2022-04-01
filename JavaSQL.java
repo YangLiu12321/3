@@ -35,9 +35,9 @@ public class JavaSQL {
       Statement dropDatabase = con.createStatement();
       Statement createDatavase = con.createStatement();
       Statement stmt = con.createStatement();
-      // stmt.executeUpdate("use CSCI3170S10;");
+      stmt.executeUpdate("use db9;");
       main_menu(con);
-      conn.close();
+      con.close();
       System.exit(0);
     } catch (SQLException e) {
         System.out.println(e);
