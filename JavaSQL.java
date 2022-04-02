@@ -610,9 +610,9 @@ public class JavaSQL {
     }
   }
 
-  /* librarian function 2 : car returning */
+  /* Manager function 2 : car returning */
   //done
-  public static void bookReturning(Connection conn) {
+  public static void carReturning(Connection conn) {
     /* Input user info: user id, car info: call number and copy nubmer*/
     String userID;
     String call_number;
@@ -656,13 +656,13 @@ public class JavaSQL {
         /* execute SQL */
         pstmt_return.execute();
         /* Informative message of successfully checkout */
-        System.out.println("Book returning performed successfully!!!");
+        System.out.println("car returning performed successfully.");
       } else {
         /* The book has been return or some reason we cannot find the record! */
         System.out.println("[Error]: Cannot found such record!");
       }
     } catch (Exception exp) {
-      System.out.println("Book returning failed to perform!!");
+      System.out.println("car returning failed to perform.");
       System.out.println("Error: " + exp);
     }
   }
