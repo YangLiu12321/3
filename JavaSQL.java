@@ -351,12 +351,13 @@ public class JavaSQL {
     }
   }
 
+  //    done
   public static void user_operation(Connection conn) {
     int input;
-    System.out.println("\n-----Operations for library user menu-----");
+    System.out.println("\n-----Operations for user menu-----");
     System.out.println("What kinds of operations would you like to perform?");
-    System.out.println("1. Search for books");
-    System.out.println("2. Show checkout records of a user");
+    System.out.println("1. Search for cars");
+    System.out.println("2. Show loan records of a user");
     System.out.println("3. Return to the main menu");
     Scanner scan = new Scanner(System.in);
     do {
@@ -364,7 +365,7 @@ public class JavaSQL {
       input = scan.nextInt();
     } while (input < 1 || input > 3);
     if (input == 1)
-      bookSearch(conn);
+      carSearch(conn);
     else if (input == 2)
       showUserRecord(conn);
     else if (input == 3)
@@ -372,17 +373,18 @@ public class JavaSQL {
     user_operation(conn);
   }
 
-  public static void bookSearch(Connection conn) {
+  // to be finished
+  public static void carSearch(Connection conn) {
     int input;
     String searchKey, callNumber;
     System.out.println("Choose the search criteria:");
     System.out.println("1. Call Number");
-    System.out.println("2. Title");
-    System.out.println("3. Author");
+    System.out.println("2. name");
+    System.out.println("3. company");
     Scanner scan = new Scanner(System.in);
     int columns = 10000;
     try{
-      String sqlStatement = "SELECT COUNT(*) FROM book";
+      String sqlStatement = "SELECT COUNT(*) FROM car";
       PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
       ResultSet rs = pstmt.executeQuery();
       // Move cursor to data
@@ -406,31 +408,31 @@ public class JavaSQL {
       // Build SQL statement
       if (input == 1) {
         callNumber = keyword.nextLine();
-        sqlStatement = "SELECT * FROM " + "book, copy, author WHERE " + "book.call_number = copy.call_number AND "
-            + "book.call_number = author.call_number AND " + "author.call_number = copy.call_number AND "
-            + "book.call_number = ?";
+        sqlStatement = "SELECT * FROM " + "car, copy, produce WHERE " + "car.call_number = copy.call_number AND "
+            + "car.call_number = produce.call_number AND " + "produce.call_number = copy.call_number AND "
+            + "car.call_number = ?";
         pstmt = conn.prepareStatement(sqlStatement);
         pstmt.setString(1, callNumber);
       } else if (input == 2) {
         searchKey = keyword.nextLine();
-        sqlStatement = "SELECT * FROM " + "book, copy, author WHERE " + "book.call_number = copy.call_number AND "
-            + "book.call_number = author.call_number AND " + "author.call_number = copy.call_number AND "
-            + "book.title LIKE BINARY ?";
+        sqlStatement = "SELECT * FROM " + "car, copy, produce WHERE " + "car.call_number = copy.call_number AND "
+            + "car.call_number = produce.call_number AND " + "produce.call_number = copy.call_number AND "
+            + "car.car_name LIKE BINARY ?";
         pstmt = conn.prepareStatement(sqlStatement);
         searchKey = "%" + searchKey + "%";
         pstmt.setString(1, searchKey);
       } else {
         searchKey = keyword.nextLine();
-        sqlStatement = "SELECT * FROM " + "book, copy, author WHERE " + "book.call_number = copy.call_number AND "
-            + "book.call_number = author.call_number AND " + "author.call_number = copy.call_number AND "
-            + "author.name LIKE BINARY ?";
+        sqlStatement = "SELECT * FROM " + "car, copy, produce WHERE " + "car.call_number = copy.call_number AND "
+            + "car.call_number = produce.call_number AND " + "produce.call_number = copy.call_number AND "
+            + "produce.name LIKE BINARY ?";
         pstmt = conn.prepareStatement(sqlStatement);
         searchKey = "%" + searchKey + "%";
         pstmt.setString(1, searchKey);
       }
       // Parse Output
       ResultSet rs = pstmt.executeQuery();
-      System.out.println("| Call Number | Title | Author |  Available Copies |");
+      System.out.println("| Call Num | Name | Car Category | Company | Available No. of Copy |");
       int copyResult = 0;
       String titleResult = "", authorResult = "", callResult = "";
       String[][] resultSet = new String[columns][3];
