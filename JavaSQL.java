@@ -530,7 +530,7 @@ public class JavaSQL {
       System.out.println("[Error]: An matching search record is not found. The input does not exist in database.");
     }
   }
-
+  //done
   public static void manager_operation(Connection conn) {
     int input;
     System.out.println("\n-----Operations for manager menu-----");
