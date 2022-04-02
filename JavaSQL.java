@@ -608,9 +608,10 @@ public class JavaSQL {
     }
   }
 
-  /* librarian function 2 : book returning */
+  /* librarian function 2 : car returning */
+  //done
   public static void bookReturning(Connection conn) {
-    /* Input user info: user id, book info: call number and copy nubmer*/
+    /* Input user info: user id, car info: call number and copy nubmer*/
     String userID;
     String call_number;
     int copy_number;
