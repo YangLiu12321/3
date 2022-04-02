@@ -331,9 +331,10 @@ public class JavaSQL {
     }
   }
 
+  //    done
   public static void showAllTable(Connection conn) {
     System.out.println("\nNumber of records in each table: ");
-    String[] tables = { "category", "user", "book", "copy", "checkout_record", "author" };
+    String[] tables = { "user_category", "user", "car_category", "car", "copy", "company", "rent" };
     String sqlStatement = "SELECT COUNT(*) FROM ";
     try {
       for (int i = 0; i < tables.length; i++) {
@@ -343,7 +344,7 @@ public class JavaSQL {
         // Move cursor to data
         rs.next();
         int count = rs.getInt("count(*)");
-        System.out.println("\033[3m" + tables[i] + "\033[0m" + ": " + count);
+        System.out.println("\ntables[i]" + ": " + count);
       }
     } catch (Exception ex) {
       System.out.println("Error: " + ex);
