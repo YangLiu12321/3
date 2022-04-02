@@ -637,9 +637,9 @@ public class JavaSQL {
       pstmt_check.setInt(3, copy_number);
 
       ResultSet rs_check = pstmt_check.executeQuery();
-      /* If the result is NOT empty, return the book, otherwise do nothing and show message */
+      /* If the result is NOT empty, return the car, otherwise do nothing and show message */
       if (rs_check.next()) {
-        /* return the book */
+        /* return the car */
         String sqlStatement_return;
         PreparedStatement pstmt_return;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -658,7 +658,7 @@ public class JavaSQL {
         /* Informative message of successfully checkout */
         System.out.println("car returning performed successfully.");
       } else {
-        /* The book has been return or some reason we cannot find the record! */
+        /* The car has been return or some reason we cannot find the record! */
         System.out.println("[Error]: Cannot found such record!");
       }
     } catch (Exception exp) {
