@@ -556,7 +556,7 @@ public class JavaSQL {
   }
 
   /* librarian function 1 : book borrowing */
-  public static void bookBorrowing(Connection conn) {
+  public static void carBorrowing(Connection conn) {
     /* Input user info: user id, book info: call number and copy nubmer*/
     String userID;
     String call_number;
@@ -668,7 +668,7 @@ public class JavaSQL {
   }
 
   /* librarian function 3 : list all un-returned book copies */
-  public static void listUnreturnedBooks(Connection conn) {
+  public static void listUnreturnedCars(Connection conn) {
     /* Input the start date and end date for */
     String startDate;
     String endDate;
