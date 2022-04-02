@@ -531,13 +531,14 @@ public class JavaSQL {
     }
   }
 
-  public static void librarian_operation(Connection conn) {
+  //    done
+  public static void manager_operation(Connection conn) {
     int input;
-    System.out.println("\n-----Operations for librarian menu-----");
+    System.out.println("\n-----Operations for manager menu-----");
     System.out.println("What kinds of operations would you like to perform?");
-    System.out.println("1. Book Borrowing");
-    System.out.println("2. Book Returning");
-    System.out.println("3. List all un-returned book copies which are checked out within a period");
+    System.out.println("1. Car Renting");
+    System.out.println("2. Car Returning");
+    System.out.println("3. List all un-returned car copies which are checked-out within a period");
     System.out.println("4. Return to the main menu");
     Scanner scan = new Scanner(System.in);
     do {
@@ -545,14 +546,14 @@ public class JavaSQL {
       input = scan.nextInt();
     } while (input < 1 || input > 4);
     if (input == 1)
-      bookBorrowing(conn);
+      carRenting(conn);
     else if (input == 2)
-      bookReturning(conn);
+      carReturning(conn);
     else if (input == 3)
-      listUnreturnedBooks(conn);
+      listUnreturnedCars(conn);
     else if (input == 4)
       main_menu(conn);
-    librarian_operation(conn);
+    manager_operation(conn);
   }
 
   /* librarian function 1 : book borrowing */
