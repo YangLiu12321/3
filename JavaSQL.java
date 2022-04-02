@@ -556,21 +556,21 @@ public class JavaSQL {
     manager_operation(conn);
   }
 
-  /* librarian function 1 : book borrowing */
-  public static void bookBorrowing(Connection conn) {
-    /* Input user info: user id, book info: call number and copy nubmer*/
+  /* manager function 1 : car renting */
+  public static void carRenting(Connection conn) {
+    /* Input user info: user id, car info: call number and copy nubmer*/
     String userID;
     String call_number;
     int copy_number;
     Scanner scan = new Scanner(System.in);
-    System.out.print("Enter The User ID: ");
+    System.out.println("Enter The User ID: ");
     userID = scan.nextLine();
-    System.out.print("Enter The Call Number: ");
+    System.out.println("Enter The Call Number: ");
     call_number = scan.nextLine();
-    System.out.print("Enter The Copy Number: ");
+    System.out.println("Enter The Copy Number: ");
     copy_number = scan.nextInt();
 
-    /* Check the availablity of the book with callNumber and copyNumber */
+    /* Check the availablity of the car with callNumber and copyNumber */
     String sqlStatement_check;
     PreparedStatement pstmt_check;
     try {
@@ -581,9 +581,7 @@ public class JavaSQL {
       pstmt_check.setInt(2, copy_number);
       ResultSet rs_check = pstmt_check.executeQuery();
       
-      /* If the result is empty, borrow the book, otherwise do nothing and show message */
       if (!rs_check.next()) {
-        /* Borrow the book */
         String sqlStatement_borrow;
         PreparedStatement pstmt_borrow;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -598,15 +596,13 @@ public class JavaSQL {
 
         /* execute SQL */
         pstmt_borrow.execute();
-        /* Informative message of successfully checkout */
-        System.out.println("Book checkout performed successfully!!");
+        System.out.println("car renting performed successfully!!");
       } else {
-        /* The book has been borrowed! */
-        System.out.println("[Error]: The Book (Call Number: " + call_number + " , Copy Number: " + copy_number
-            + ") has been borrowed!");
+        System.out.println("[Error]: The Car (Call Number: " + call_number + " , Copy Number: " + copy_number
+            + ") has been rent!");
       }
     } catch (Exception exp) {
-      System.out.println("Book checkout failed to perform!!");
+      System.out.println("car renting failed to perform!!");
       System.out.println("Error: " + exp);
     }
   }
@@ -638,9 +634,9 @@ public class JavaSQL {
       pstmt_check.setInt(3, copy_number);
 
       ResultSet rs_check = pstmt_check.executeQuery();
-      /* If the result is NOT empty, return the book, otherwise do nothing and show message */
+      /* If the result is NOT empty, return the car, otherwise do nothing and show message */
       if (rs_check.next()) {
-        /* return the book */
+        /* return the car */
         String sqlStatement_return;
         PreparedStatement pstmt_return;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -659,7 +655,7 @@ public class JavaSQL {
         /* Informative message of successfully checkout */
         System.out.println("car returning performed successfully.");
       } else {
-        /* The book has been return or some reason we cannot find the record! */
+        /* The car has been return or some reason we cannot find the record! */
         System.out.println("[Error]: Cannot found such record!");
       }
     } catch (Exception exp) {
@@ -669,7 +665,7 @@ public class JavaSQL {
   }
 
   /* librarian function 3 : list all un-returned book copies */
-  public static void listUnreturnedBooks(Connection conn) {
+  public static void listUnreturnedCars(Connection conn) {
     /* Input the start date and end date for */
     String startDate;
     String endDate;
