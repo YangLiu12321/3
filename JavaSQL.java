@@ -192,17 +192,23 @@ public class JavaSQL {
   }
 
   /* Load ALL test data for database */
+  //    done.
+  //    loadDataCarCategory(conn, path); 
+  //    loadDataCar(conn, path); 
+  //    loadRent(conn,path); 
+  //        to be implemented.
   public static void LoadData(Connection conn) {
     Scanner scan = new Scanner(System.in);
     System.out.print("Type in the Source Data Folder Path: ");
     String path = scan.nextLine();
     try {
-      System.out.println("Processing...\n");
-      loadDataCategory(conn, path);
+      System.out.println("Processing...");
+      loadDataUserCategory(conn, path);
       loadDataUser(conn, path);
-      loadDataBookAndAuthor(conn, path);
-      loadDataCheckoutRecord(conn, path);
-      System.out.println("Data are loaded successfully!\n");
+      loadDataCarCategory(conn, path);
+      loadDataCar(conn, path);
+      loadRent(conn,path);
+      System.out.println("Done. Data is inputted to the database\n");
     } catch (Exception ex) {
       System.out.println("Error: " + ex);
     }
@@ -210,12 +216,13 @@ public class JavaSQL {
   }
 
   /* load testdata for table: Category */
-  public static void loadDataCategory(Connection conn, String path) throws Exception {
-    File file = new File(path + "/" + "category.txt");
+  //    done
+  public static void loadDataUserCategory(Connection conn, String path) throws Exception {
+    File file = new File(path + "/" + "user_category.txt");
     Scanner scan = new Scanner(file);
 
     PreparedStatement pstmt = conn
-        .prepareStatement("INSERT INTO category (id, max_books, loan_period) VALUES (?, ?, ?)");
+        .prepareStatement("INSERT INTO user_category (ucid, max_cars, loan_period) VALUES (?, ?, ?)");
     while (scan.hasNextLine()) {
       String data = scan.nextLine();
       String[] result = data.split("\t");
@@ -223,17 +230,18 @@ public class JavaSQL {
         pstmt.setString(i + 1, result[i]);
       pstmt.execute();
     }
-    System.out.println("Data of Category have been loaded successfully!\n");
+//    System.out.println("Data of Category have been loaded successfully!\n");
     return;
   }
 
   /* load test data for table: User */
+  //    done
   public static void loadDataUser(Connection conn, String path) throws Exception {
     File file = new File(path + "/" + "user.txt");
     Scanner scan = new Scanner(file);
 
     PreparedStatement pstmt = conn
-        .prepareStatement("INSERT INTO user (user_id, name, address, category_id) VALUES (?, ?, ?, ?)");
+        .prepareStatement("INSERT INTO user (uid, name, age, occupation, user_category_id) VALUES (?, ?, ?, ?, ?)");
     while (scan.hasNextLine()) {
       String data = scan.nextLine();
       String[] result = data.split("\t");
@@ -241,7 +249,7 @@ public class JavaSQL {
         pstmt.setString(i + 1, result[i]);
       pstmt.execute();
     }
-    System.out.println("Data of User have been loaded successfully!\n");
+//    System.out.println("Data of User have been loaded successfully!\n");
     return;
   }
 
@@ -306,6 +314,7 @@ public class JavaSQL {
     System.out.println("Data of Checkout Record have been loaded successfully!\n");
   }
 
+  //    done
   public static void dropAllTable(Connection conn) {
     System.out.println("Processing...");
     String[] tables = { "user_category", "user", "car", "copy", "rent", "car_category","produce" };
