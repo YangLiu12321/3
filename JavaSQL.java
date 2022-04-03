@@ -221,13 +221,12 @@ public class JavaSQL {
     File file = new File(path + "/" + "user_category.txt");
     Scanner scan = new Scanner(file);
 
-    PreparedStatement pstmt = conn
-        .prepareStatement("INSERT INTO user_category (ucid, max_cars, loan_period) VALUES (?, ?, ?)");
+    PreparedStatement pstmt = conn.prepareStatement("INSERT INTO user_category (ucid, max_cars, loan_period) VALUES (?, ?, ?)");
     while (scan.hasNextLine()) {
       String data = scan.nextLine();
       String[] result = data.split("\t");
       for (int i = 0; i < result.length; i++)
-        pstmt.setString(i + 1, result[i]);
+      pstmt.setString(i + 1, result[i]);
       pstmt.execute();
     }
     System.out.println("Data of user category have been loaded successfully!\n");
@@ -245,16 +244,35 @@ public class JavaSQL {
       String data = scan.nextLine();
       String[] result = data.split("\t");
       for (int i = 0; i < result.length; i++)
-        pstmt.setString(i + 1, result[i]);
+      pstmt.setString(i + 1, result[i]);
       pstmt.execute();
     }
     System.out.println("Data of user have been loaded successfully!\n");
     return;
   }
+  
+  /* load testdata for table: Car Category */
+  //    done
+  public static void loadDataCarCategory(Connection conn, String path) throws Exception {
+    File file = new File(path + "/" + "car_category.txt");
+    Scanner scan = new Scanner(file);
+
+    PreparedStatement pstmt = conn.prepareStatement("INSERT INTO car_category (ccid, car_category_name) VALUES (?, ?)");
+    while (scan.hasNextLine()) {
+      String data = scan.nextLine();
+      String[] result = data.split("\t");
+      for (int i = 0; i < result.length; i++)
+      pstmt.setString(i + 1, result[i]);
+      pstmt.execute();
+    }
+    System.out.println("Data of car category have been loaded successfully!\n");
+    return;
+  }
+
 
   /* load test data for tables: Car, Copy and Produce*/
   //    done
-  public static void loadDataBookAndAuthor(Connection conn, String path) throws Exception {
+  public static void loadDataCar(Connection conn, String path) throws Exception {
     String[] result;
     File file = new File(path + "/" + "car.txt");
     Scanner scan = new Scanner(file);
@@ -288,15 +306,15 @@ public class JavaSQL {
     System.out.println("Data of car has been loaded successfully!\n");
   }
 
-  /* load test data for table: Checkout_record */
+  /* load test data for table: Rent */
   //    done
-  public static void loadDataCheckoutRecord(Connection conn, String path) throws Exception {
+  public static void loadRent(Connection conn, String path) throws Exception {
     File file = new File(path + "/" + "rent.txt");
     Scanner scan = new Scanner(file);
     PreparedStatement pstmt = conn.prepareStatement(
         "INSERT INTO rent (uid, call_number, copy_number, checkout_date, return_date) VALUES (?, ?, ?, ?, ?)");
     while (scan.hasNextLine()) {
-      // checkout.txt: {call_number, copy_number, user_id ,checkout_date, return_date}
+      // rent.txt: {call_number, copy_number, user_id ,checkout_date, return_date}
       String data = scan.nextLine();
       String[] result = data.split("\t");
       pstmt.setString(1, result[2]);
