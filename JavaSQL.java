@@ -572,7 +572,8 @@ public class JavaSQL {
       main_menu(conn);
     manager_operation(conn);
   }
-
+  
+  //done
   /* manager function 1 : car renting */
   public static void carRenting(Connection conn) {
     /* Input user info: user id, car info: call number and copy nubmer*/
@@ -639,7 +640,7 @@ public class JavaSQL {
     System.out.print("Enter The Copy Number: ");
     copy_number = scan.nextInt();
 
-    /* Check the existence of the checkout record with the user info and book info */
+    /* Check the existence of the renting record with the user info and car info */
     String sqlStatement_check;
     PreparedStatement pstmt_check;
     try {
@@ -669,7 +670,7 @@ public class JavaSQL {
 
         /* execute SQL */
         pstmt_return.execute();
-        /* Informative message of successfully checkout */
+        /* Informative message of successfully renting */
         System.out.println("car returning performed successfully.");
       } else {
         /* The car has been return or some reason we cannot find the record! */
@@ -680,7 +681,7 @@ public class JavaSQL {
       System.out.println("Error: " + exp);
     }
   }
-
+  //to be finished
   /* librarian function 3 : list all un-returned book copies */
   public static void listUnreturnedCars(Connection conn) {
     /* Input the start date and end date for */
