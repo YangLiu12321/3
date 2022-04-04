@@ -552,7 +552,7 @@ public class JavaSQL {
   public static void manager_operation(Connection conn) {
     int input;
     System.out.println("\n-----Operations for manager menu-----");
-    System.out.println("What kinds of operations would you like to perform?");
+    System.out.println("What kind of operation would you like to perform?");
     System.out.println("1. Car Renting");
     System.out.println("2. Car Returning");
     System.out.println("3. List all un-returned car copies which are checked-out within a period");
