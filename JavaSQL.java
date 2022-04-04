@@ -681,8 +681,8 @@ public class JavaSQL {
       System.out.println("Error: " + exp);
     }
   }
-  //to be finished
-  /* librarian function 3 : list all un-returned book copies */
+ 
+  /* librarian function 3 : list all un-returned car copies */
   public static void listUnreturnedCars(Connection conn) {
     /* Input the start date and end date for */
     String startDate;
