@@ -106,7 +106,7 @@ public class JavaSQL {
       PreparedStatement pstmt_create_usercategory;
 
       /* create table: user_category */
-      sqlStatement_create_usercategory = "CREATE TABLE user_category(" + "ucid(1) integer primary key,"
+      sqlStatement_create_usercategory = "CREATE TABLE user_category(" + "ucid integer(1) primary key,"
           + "max_cars integer(1) not null," + "loan_period integer(2) not null)";
 
       pstmt_create_usercategory = conn.prepareStatement(sqlStatement_create_usercategory);
