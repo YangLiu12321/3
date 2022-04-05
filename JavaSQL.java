@@ -117,8 +117,7 @@ public class JavaSQL {
       PreparedStatement pstmt_create_user;
 
       sqlStatement_create_user = "CREATE TABLE user(" + "uid varchar(12) primary key,"
-          + "name varchar(25) not null," + "age integer(2) not null" + "occupation varchar(20) not null," + "user_category_id integer not null,"
-          + "FOREIGN KEY(user_category_id) REFERENCES user_category(ucid))";
+          + "name varchar(25) not null," + "age integer(2) not null, " + " occupation varchar(20) not null," + "user_category_id integer not null)";
 
       pstmt_create_user = conn.prepareStatement(sqlStatement_create_user);
       /* execute SQL */
@@ -138,8 +137,8 @@ public class JavaSQL {
       PreparedStatement pstmt_create_car;
 
       sqlStatement_create_car = "CREATE TABLE car(" + "call_number varchar(8) primary key,"
-          + "car_name varchar(10) not null," + "manufacture_date varchar(10) not null," + "time_rent vaechar(2) not full"
-          + "car_category_id integer(1) not null" + "FOREIGN KEY(ccid) REFERENCES car_category(ccid))";
+          + "car_name varchar(10) not null," + "manufacture_date varchar(10) not null," + "time_rent varchar(2) not null, "
+          + "car_category_id integer(1) not null)";
 
       pstmt_create_car = conn.prepareStatement(sqlStatement_create_car);
       /* execute SQL */
@@ -149,8 +148,7 @@ public class JavaSQL {
       PreparedStatement pstmt_create_produce;
 
       sqlStatement_create_produce = "CREATE TABLE produce(" + "name varchar(25) not null,"
-          + "call_number varchar(8) not null," + "PRIMARY KEY(name, call_number),"
-          + "FOREIGN KEY(call_number) REFERENCES car(call_number))";
+          + "call_number varchar(8) not null," + "PRIMARY KEY(name, call_number))";
 
       pstmt_create_produce = conn.prepareStatement(sqlStatement_create_produce);
       /* execute SQL */
@@ -160,8 +158,7 @@ public class JavaSQL {
       PreparedStatement pstmt_create_copy;
 
       sqlStatement_create_copy = "CREATE TABLE copy(" + "call_number varchar(8) not null,"
-          + "copy_number integer not null," + "PRIMARY KEY(call_number, copy_number),"
-          + "FOREIGN KEY(call_number) REFERENCES car(call_number));";
+          + "copy_number integer not null," + "PRIMARY KEY(call_number, copy_number))";
 
       pstmt_create_copy = conn.prepareStatement(sqlStatement_create_copy);
       /* execute SQL */
@@ -172,9 +169,7 @@ public class JavaSQL {
 
       sqlStatement_create_rent = "CREATE TABLE rent(" + "uid varchar(10) not null,"
           + "call_number varchar(8) not null," + "copy_number integer not null," + "checkout_date varchar(10) not null,"
-          + "return_date varchar(10)," + "PRIMARY KEY(uid, call_number, copy_number, checkout_date),"
-          + "FOREIGN KEY(uid) REFERENCES user(uid),"
-          + "FOREIGN KEY(call_number, copy_number) REFERENCES copy(call_number, copy_number))";
+          + "return_date varchar(10)," + "PRIMARY KEY(uid, call_number, copy_number, checkout_date))";
 
       pstmt_create_rent = conn.prepareStatement(sqlStatement_create_rent);
       /* execute SQL */
@@ -341,8 +336,11 @@ public class JavaSQL {
     System.out.println("Processing...");
     String[] tables = { "user_category", "user", "car", "copy", "rent", "car_category","produce" };
     String sqlStatement = "DROP TABLE IF EXISTS  ";
+    String setStatement = "SET FOREIGN_KEY_CHECKS=0;";
     try {
       for (int i = 0; i < tables.length; i++) {
+        PreparedStatement setS = conn.prepareStatement(setStatement);
+        setS.executeUpdate();
         String temp = sqlStatement + tables[i];
         PreparedStatement pstmt = conn.prepareStatement(temp);
         pstmt.executeUpdate();
@@ -356,7 +354,7 @@ public class JavaSQL {
   //    done
   public static void showAllTable(Connection conn) {
     System.out.println("\nNumber of records in each table: ");
-    String[] tables = { "user_category", "user", "car_category", "car", "copy", "company", "rent" };
+    String[] tables = { "user_category", "user", "car_category", "car", "copy", "produce", "rent" };
     String sqlStatement = "SELECT COUNT(*) FROM ";
     try {
       for (int i = 0; i < tables.length; i++) {
@@ -366,7 +364,11 @@ public class JavaSQL {
         // Move cursor to data
         rs.next();
         int count = rs.getInt("count(*)");
-        System.out.println("\ntables[i]" + ": " + count);
+        if (tables[i] == "produce"){
+            System.out.println("\ncompany: " + count);
+        }else{
+            System.out.println("\n" + tables[i] + ": " + count);
+        }
       }
     } catch (Exception ex) {
       System.out.println("Error: " + ex);
