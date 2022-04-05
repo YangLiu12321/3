@@ -43,6 +43,7 @@ public class JavaSQL {
     }
   }
 
+  // done
   public static void main_menu(Connection conn) {
     int input;
     System.out.println("\n-----Main Menu-----");
@@ -68,6 +69,7 @@ public class JavaSQL {
     }
   }
 
+  // done
   public static void admin_operation(Connection conn) {
     int input;
     System.out.println("\n-----Operations for administrator menu-----");
@@ -96,6 +98,7 @@ public class JavaSQL {
   }
 
   /* Create All tables */
+  // done
   public static void createAllTables(Connection conn) {
     System.out.println("Processing...\n");
     try {
@@ -271,20 +274,20 @@ public class JavaSQL {
 
 
   /* load test data for tables: Car, Copy and Produce*/
-  //    done
+  // done. fixed.
   public static void loadDataCar(Connection conn, String path) throws Exception {
     String[] result;
     File file = new File(path + "/" + "car.txt");
     Scanner scan = new Scanner(file);
-    PreparedStatement ps_car = conn.prepareStatement("INSERT INTO book (call_number, name, manufacture,time_rent,ccid) VALUES (?, ?, ?, ?, ?)");
+    PreparedStatement ps_car = conn.prepareStatement("INSERT INTO car (call_number, car_name, manufacture_date, time_rent, car_category_id) VALUES (?, ?, ?, ?, ?)");
     PreparedStatement ps_copy = conn.prepareStatement("INSERT INTO copy (call_number, copy_number) VALUES (?,?)");
     PreparedStatement ps_produce = conn.prepareStatement("INSERT INTO produce (name, call_number) VALUES (?,?)");
 
     while (scan.hasNextLine()) {
       String data = scan.nextLine();
       result = data.split("\t");
-      String author = result[3];
-      String[] nameList = author.split(",");
+      String company = result[3];
+      String[] nameList = company.split(",");
       try {
         for (int i = 0; i < nameList.length; i++) {
           ps_produce.setString(1, nameList[i]);
@@ -300,6 +303,8 @@ public class JavaSQL {
       ps_car.setString(1, result[0]);
       ps_car.setString(2, result[2]);
       ps_car.setString(3, result[4]);
+      ps_car.setString(4, result[5]);
+      ps_car.setString(5, result[6]);
       ps_copy.execute();
       ps_car.execute();
     }
@@ -390,7 +395,7 @@ public class JavaSQL {
     user_operation(conn);
   }
 
-  // to be finished
+  // done
   public static void carSearch(Connection conn) {
     int input;
     String searchKey, callNumber;
@@ -425,23 +430,23 @@ public class JavaSQL {
       // Build SQL statement
       if (input == 1) {
         callNumber = keyword.nextLine();
-        sqlStatement = "SELECT * FROM " + "car, copy, produce WHERE " + "car.call_number = copy.call_number AND "
-            + "car.call_number = produce.call_number AND " + "produce.call_number = copy.call_number AND "
+        sqlStatement = "SELECT * FROM " + "car, copy, produce, car_category WHERE " + "car.call_number = copy.call_number AND "
+            + "car.call_number = produce.call_number AND " + "produce.call_number = copy.call_number AND " + "car_category.ccid = car.car_category_id AND "
             + "car.call_number = ?";
         pstmt = conn.prepareStatement(sqlStatement);
         pstmt.setString(1, callNumber);
       } else if (input == 2) {
         searchKey = keyword.nextLine();
-        sqlStatement = "SELECT * FROM " + "car, copy, produce WHERE " + "car.call_number = copy.call_number AND "
-            + "car.call_number = produce.call_number AND " + "produce.call_number = copy.call_number AND "
+        sqlStatement = "SELECT * FROM " + "car, copy, produce, car_category WHERE " + "car.call_number = copy.call_number AND "
+            + "car.call_number = produce.call_number AND " + "produce.call_number = copy.call_number AND " + "car_category.ccid = car.car_category_id AND "
             + "car.car_name LIKE BINARY ?";
         pstmt = conn.prepareStatement(sqlStatement);
         searchKey = "%" + searchKey + "%";
         pstmt.setString(1, searchKey);
       } else {
         searchKey = keyword.nextLine();
-        sqlStatement = "SELECT * FROM " + "car, copy, produce WHERE " + "car.call_number = copy.call_number AND "
-            + "car.call_number = produce.call_number AND " + "produce.call_number = copy.call_number AND "
+        sqlStatement = "SELECT * FROM " + "car, copy, produce, car_category WHERE " + "car.call_number = copy.call_number AND "
+            + "car.call_number = produce.call_number AND " + "produce.call_number = copy.call_number AND " + "car_category.ccid = car.car_category_id AND "
             + "produce.name LIKE BINARY ?";
         pstmt = conn.prepareStatement(sqlStatement);
         searchKey = "%" + searchKey + "%";
@@ -451,8 +456,7 @@ public class JavaSQL {
       ResultSet rs = pstmt.executeQuery();
       System.out.println("| Call Num | Name | Car Category | Company | Available No. of Copy |");
       int copyResult = 0;
-      String titleResult = "", authorResult = "", callResult = "";
-      String[][] resultSet = new String[columns][3];
+      String[][] resultSet = new String[columns][4];
       int[] copyNumberSet = new int[columns];
       int count = 0;
       while (rs.next()) {
@@ -462,22 +466,22 @@ public class JavaSQL {
         for(int i=0; i<count; i++){
           if(resultSet[i][0].equals(callTemp)){
             found = true;
-            resultSet[i][2] = resultSet[i][2] + ", " + rs.getString("name");
+//            resultSet[i][2] = resultSet[i][2] + ", " + rs.getString("name");
           }
         }
         if(found)
           continue;
 
         resultSet[count][0] = callTemp;
-        resultSet[count][1] = rs.getString("title");
-        resultSet[count][2] = rs.getString("name");
+        resultSet[count][1] = rs.getString("car_name");
+        resultSet[count][2] = rs.getString("car_category_name");
+        resultSet[count][3] = rs.getString("name");
         copyNumberSet[count] = rs.getInt("copy_number");
         
         count += 1;
 
-        String sqlStatement_unreturn = "SELECT count(return_date) FROM checkout_record WHERE return_date = '' AND call_number = ? group by call_number";
+        String sqlStatement_unreturn = "SELECT count(return_date) FROM rent WHERE return_date = '' AND call_number = ? group by call_number";
         PreparedStatement unreturnPstmt = conn.prepareStatement(sqlStatement_unreturn);
-        unreturnPstmt.setString(1, callResult);
         ResultSet unreturnSet = unreturnPstmt.executeQuery();
         if(unreturnSet.next()){
           int number = unreturnSet.getInt("count(return_date)");
@@ -488,7 +492,7 @@ public class JavaSQL {
         throw new Exception("no output");
       else{
         for(int i=0; i<count; i++)
-          System.out.println("| " + resultSet[i][0] + " | " + resultSet[i][1] + " | " + resultSet[i][2] + " | " + copyNumberSet[i] + "  |");
+          System.out.println("| " + resultSet[i][0] + " | " + resultSet[i][1] + " | " + resultSet[i][2] + " | " + resultSet[i][3] + " | " + copyNumberSet[i] + "  |");
       }
     } catch (Exception exp) {
       System.out.println("[Error]: An matching search record is not found. The input does not exist in database.");
