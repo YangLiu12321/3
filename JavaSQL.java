@@ -577,12 +577,12 @@ public class JavaSQL {
   /* manager function 1 : car renting */
   public static void carRenting(Connection conn) {
     /* Input user info: user id, car info: call number and copy nubmer*/
-    String userID;
+    String uid;
     String call_number;
     int copy_number;
     Scanner scan = new Scanner(System.in);
     System.out.println("Enter The User ID: ");
-    userID = scan.nextLine();
+    uid = scan.nextLine();
     System.out.println("Enter The Call Number: ");
     call_number = scan.nextLine();
     System.out.println("Enter The Copy Number: ");
@@ -592,7 +592,7 @@ public class JavaSQL {
     String sqlStatement_check;
     PreparedStatement pstmt_check;
     try {
-      sqlStatement_check = "SELECT * FROM " + "checkout_record WHERE " + "call_number = ? AND " + "copy_number = ? AND "
+      sqlStatement_check = "SELECT * FROM " + "rent WHERE " + "call_number = ? AND " + "copy_number = ? AND "
           + "return_date = ''";
       pstmt_check = conn.prepareStatement(sqlStatement_check);
       pstmt_check.setString(1, call_number);
@@ -605,11 +605,11 @@ public class JavaSQL {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.now();
         /* Insert record */
-        sqlStatement_borrow = "INSERT INTO checkout_record (call_number, copy_number, user_id, checkout_date, return_date) VALUES (?, ?, ?, ?, '')";
+        sqlStatement_borrow = "INSERT INTO rent (call_number, copy_number, uid, checkout_date, return_date) VALUES (?, ?, ?, ?, '')";
         pstmt_borrow = conn.prepareStatement(sqlStatement_borrow);
         pstmt_borrow.setString(1, call_number);
         pstmt_borrow.setInt(2, copy_number);
-        pstmt_borrow.setString(3, userID);
+        pstmt_borrow.setString(3, uid);
         pstmt_borrow.setString(4, dtf.format(localDate));
 
         /* execute SQL */
@@ -644,7 +644,7 @@ public class JavaSQL {
     String sqlStatement_check;
     PreparedStatement pstmt_check;
     try {
-      sqlStatement_check = "SELECT * FROM " + "checkout_record WHERE " + "user_id = ? AND " + "call_number = ? AND "
+      sqlStatement_check = "SELECT * FROM " + "rent WHERE " + "uid = ? AND " + "call_number = ? AND "
           + "copy_number = ? AND " + "return_date = ''";
       pstmt_check = conn.prepareStatement(sqlStatement_check);
       pstmt_check.setString(1, userID);
@@ -660,7 +660,7 @@ public class JavaSQL {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.now();
         /* Update table */
-        sqlStatement_return = "UPDATE checkout_record " + "SET return_date = ? " + "WHERE user_id = ? AND "
+        sqlStatement_return = "UPDATE rent " + "SET return_date = ? " + "WHERE uid = ? AND "
             + "call_number = ? AND " + "copy_number = ?";
         pstmt_return = conn.prepareStatement(sqlStatement_return);
         pstmt_return.setString(1, dtf.format(localDate));
