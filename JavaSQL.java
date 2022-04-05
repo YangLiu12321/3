@@ -499,41 +499,43 @@ public class JavaSQL {
     }
   }
 
+  // done
   public static void showUserRecord(Connection conn) {
     String userID;
     try {
-      System.out.print("Enter the User ID: ");
+      System.out.print("Enter The User ID: ");
       Scanner scan = new Scanner(System.in);
       String sqlStatement;
       PreparedStatement pstmt;
       // Build SQL statement
       userID = scan.nextLine();
-      sqlStatement = "SELECT * FROM " + "book, copy, author, checkout_record WHERE "
-          + "book.call_number = copy.call_number AND " + "book.call_number = author.call_number AND "
-          + "author.call_number = copy.call_number AND " + "checkout_record.call_number = book.call_number AND "
-          + "checkout_record.user_id = ?";
+      sqlStatement = "SELECT * FROM " + "car, copy, produce, rent WHERE "
+          + "car.call_number = copy.call_number AND " + "car.call_number = produce.call_number AND "
+          + "rent.call_number = car.call_number AND "
+          + "rent.user_id = ?";
       pstmt = conn.prepareStatement(sqlStatement);
       pstmt.setString(1, userID);
 
       // Parse Output
       ResultSet rs = pstmt.executeQuery();
-      System.out.println("| Call Number | Copy Number | Title | Author | Check-out | Returned? |");
+      System.out.println("Loan Record:");
+      System.out.println("|Call Num|CopyNum|Name|Company|Check-out|Returned?|");
       Boolean hasResult = false;
       int copyResult = 0;
-      String titleResult = "", authorResult = "", callResult = "", checkoutResult = "", returnResult = "";
+      String carNameResult = "", companyResult = "", callResult = "", checkoutResult = "", returnResult = "";
       while (rs.next()) {
         hasResult = true;
         String callTemp = rs.getString("call_number");
         if (callTemp.equals(callResult)) {
-          authorResult = authorResult + ", " + rs.getString("name");
+//          companyResult = companyResult + ", " + rs.getString("name");
         } else {
           if (!callResult.equals(""))
-            System.out.println("| " + callResult + " | " + copyResult + " | " + titleResult + " | " + authorResult
-                + " | " + checkoutResult + " | " + returnResult + "  |");
+            System.out.println("|" + callResult + "|" + copyResult + "|" + carNameResult + "|" + companyResult
+                + "|" + checkoutResult + "|" + returnResult + "|");
           callResult = callTemp;
           copyResult = rs.getInt("copy_number");
-          titleResult = rs.getString("title");
-          authorResult = rs.getString("name");
+          carNameResult = rs.getString("car_name");
+          companyResult = rs.getString("name");
           checkoutResult = rs.getString("checkout_date");
           returnResult = rs.getString("return_date");
           if (returnResult.equals(""))
@@ -545,8 +547,9 @@ public class JavaSQL {
       if (!hasResult)
         throw new Exception("no output");
       else
-        System.out.println("| " + callResult + " | " + copyResult + " | " + titleResult + " | " + authorResult + " | "
-            + checkoutResult + " | " + returnResult + "  |");
+        System.out.println("|" + callResult + "|" + copyResult + "|" + carNameResult + "|" + companyResult
+                + "|" + checkoutResult + "|" + returnResult + "|");
+        System.out.println("End of Query");
     } catch (Exception exp) {
       System.out.println("[Error]: An matching search record is not found. The input does not exist in database.");
     }
