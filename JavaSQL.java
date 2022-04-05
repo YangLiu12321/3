@@ -689,14 +689,14 @@ public class JavaSQL {
     }
   }
  
-  /* librarian function 3 : list all un-returned car copies */
+  /* Manager function 3 : list all un-returned car copies */
   public static void listUnreturnedCars(Connection conn) {
     /* Input the start date and end date for */
     String startDate;
     String endDate;
     int columns = 10000;
     try{
-      String sqlStatement = "SELECT COUNT(*) FROM checkout_record";
+      String sqlStatement = "SELECT COUNT(*) FROM rent";
       PreparedStatement pstmt = conn.prepareStatement(sqlStatement);
       ResultSet rs = pstmt.executeQuery();
       // Move cursor to data
@@ -714,19 +714,19 @@ public class JavaSQL {
     endDate = scan.nextLine();
 
     /* Get unreturn data 
-    checkout_record (user_id,   call_number,   copy_number,    checkout_date,  return_date) */
+    rent (uid,   call_number,   copy_number,    checkout_date,  return_date) */
     String sqlStatement_unreturn;
     PreparedStatement pstmt_unreturn;
     int returnCount = 0;
     try {
-      sqlStatement_unreturn = "SELECT user_id, call_number, copy_number, checkout_date FROM " + "checkout_record WHERE "
+      sqlStatement_unreturn = "SELECT uid, call_number, copy_number, checkout_date FROM " + "rent WHERE "
           + "return_date = '' " + "ORDER BY checkout_date DESC;";
       pstmt_unreturn = conn.prepareStatement(sqlStatement_unreturn);
 
       /* Printing the result to console */
       ResultSet rs_unreturn = pstmt_unreturn.executeQuery();
 
-      System.out.println("| User ID | Call Number | Copy Number | Checkout Date |");
+      System.out.println("|UID|CallNum|CopyNum|Checkout|");
       Boolean hasResult = false;
       while (rs_unreturn.next()) {
         String dateToCheck = rs_unreturn.getString("checkout_date");
@@ -735,7 +735,7 @@ public class JavaSQL {
         checkDate = checkDate && sdf.parse(dateToCheck).after(sdf.parse(startDate));
         if(checkDate){
           hasResult = true;
-          resultsInRange[returnCount][0] = rs_unreturn.getString("user_id");
+          resultsInRange[returnCount][0] = rs_unreturn.getString("uid");
           resultsInRange[returnCount][1] = rs_unreturn.getString("call_number");
           resultsInRange[returnCount][2] = rs_unreturn.getString("copy_number");
           resultsInRange[returnCount][3] = dateToCheck;
