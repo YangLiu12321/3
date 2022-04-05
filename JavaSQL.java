@@ -466,7 +466,7 @@ public class JavaSQL {
         for(int i=0; i<count; i++){
           if(resultSet[i][0].equals(callTemp)){
             found = true;
-//            resultSet[i][2] = resultSet[i][2] + ", " + rs.getString("name");
+            resultSet[i][2] = resultSet[i][2] + ", " + rs.getString("name");
           }
         }
         if(found)
@@ -527,7 +527,7 @@ public class JavaSQL {
         hasResult = true;
         String callTemp = rs.getString("call_number");
         if (callTemp.equals(callResult)) {
-//          companyResult = companyResult + ", " + rs.getString("name");
+         companyResult = companyResult + ", " + rs.getString("name");
         } else {
           if (!callResult.equals(""))
             System.out.println("|" + callResult + "|" + copyResult + "|" + carNameResult + "|" + companyResult
