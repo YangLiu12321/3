@@ -590,11 +590,11 @@ public class JavaSQL {
     String call_number;
     int copy_number;
     Scanner scan = new Scanner(System.in);
-    System.out.println("Enter The User ID: ");
+    System.out.print("Enter The User ID: ");
     uid = scan.nextLine();
-    System.out.println("Enter The Call Number: ");
+    System.out.print("Enter The Call Number: ");
     call_number = scan.nextLine();
-    System.out.println("Enter The Copy Number: ");
+    System.out.print("Enter The Copy Number: ");
     copy_number = scan.nextInt();
 
     /* Check the availablity of the car with callNumber and copyNumber */
