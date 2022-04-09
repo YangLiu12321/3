@@ -407,7 +407,7 @@ public class JavaSQL {
     int input;
     String searchKey, callNumber;
     System.out.println("Choose the search criteria:");
-    System.out.println("1. Call Number");
+    System.out.println("1. call number");
     System.out.println("2. name");
     System.out.println("3. company");
     Scanner scan = new Scanner(System.in);
