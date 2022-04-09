@@ -8,6 +8,8 @@ import java.sql.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.File;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 
 import java.util.Scanner;
 import java.util.Date;
@@ -199,6 +201,8 @@ public class JavaSQL {
     Scanner scan = new Scanner(System.in);
     System.out.print("Type in the Source Data Folder Path: ");
     String path = scan.nextLine();
+    Path currentPath = Paths.get(System.getProperty("user.dir"));
+    path = Paths.get(currentPath.toString(), path).toString();
     try {
       System.out.println("Processing...");
       loadDataUserCategory(conn, path);
@@ -216,7 +220,8 @@ public class JavaSQL {
   /* load testdata for table: User Category */
   //    done
   public static void loadDataUserCategory(Connection conn, String path) throws Exception {
-    File file = new File(path + "/" + "user_category.txt");
+    
+    File file = new File(Paths.get(path, "user_category.txt").toString());
     Scanner scan = new Scanner(file);
 
     PreparedStatement pstmt = conn.prepareStatement("INSERT INTO user_category (ucid, max_cars, loan_period) VALUES (?, ?, ?)");
@@ -234,7 +239,7 @@ public class JavaSQL {
   /* load test data for table: User */
   //    done
   public static void loadDataUser(Connection conn, String path) throws Exception {
-    File file = new File(path + "/" + "user.txt");
+    File file = new File(Paths.get(path, "user.txt").toString());
     Scanner scan = new Scanner(file);
 
     PreparedStatement pstmt = conn.prepareStatement("INSERT INTO user (uid, name, age, occupation, user_category_id) VALUES (?, ?, ?, ?, ?)");
@@ -252,7 +257,7 @@ public class JavaSQL {
   /* load testdata for table: Car Category */
   //    done
   public static void loadDataCarCategory(Connection conn, String path) throws Exception {
-    File file = new File(path + "/" + "car_category.txt");
+    File file = new File(Paths.get(path, "car_category.txt").toString());
     Scanner scan = new Scanner(file);
 
     PreparedStatement pstmt = conn.prepareStatement("INSERT INTO car_category (ccid, car_category_name) VALUES (?, ?)");
@@ -272,7 +277,7 @@ public class JavaSQL {
   // done. fixed.
   public static void loadDataCar(Connection conn, String path) throws Exception {
     String[] result;
-    File file = new File(path + "/" + "car.txt");
+    File file = new File(Paths.get(path, "car.txt").toString());
     Scanner scan = new Scanner(file);
     PreparedStatement ps_car = conn.prepareStatement("INSERT INTO car (call_number, car_name, manufacture_date, time_rent, car_category_id) VALUES (?, ?, ?, ?, ?)");
     PreparedStatement ps_copy = conn.prepareStatement("INSERT INTO copy (call_number, copy_number) VALUES (?,?)");
@@ -309,7 +314,7 @@ public class JavaSQL {
   /* load test data for table: Rent */
   //    done
   public static void loadRent(Connection conn, String path) throws Exception {
-    File file = new File(path + "/" + "rent.txt");
+    File file = new File(Paths.get(path, "rent.txt").toString());
     Scanner scan = new Scanner(file);
     PreparedStatement pstmt = conn.prepareStatement(
         "INSERT INTO rent (uid, call_number, copy_number, checkout_date, return_date) VALUES (?, ?, ?, ?, ?)");
