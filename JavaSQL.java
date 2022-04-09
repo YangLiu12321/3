@@ -169,7 +169,7 @@ public class JavaSQL {
       String sqlStatement_create_rent;
       PreparedStatement pstmt_create_rent;
 
-      sqlStatement_create_rent = "CREATE TABLE rent(" + "uid varchar(10) not null,"
+      sqlStatement_create_rent = "CREATE TABLE rent(" + "uid varchar(12) not null,"
           + "call_number varchar(8) not null," + "copy_number integer not null," + "checkout_date varchar(10) not null,"
           + "return_date varchar(10)," + "PRIMARY KEY(uid, call_number, copy_number, checkout_date))";
 
