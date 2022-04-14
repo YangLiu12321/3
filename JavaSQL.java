@@ -523,7 +523,7 @@ public class JavaSQL {
       sqlStatement = "SELECT * FROM " + "car, copy, produce, rent WHERE "
           + "car.call_number = copy.call_number AND " + "car.call_number = produce.call_number AND "
           + "rent.call_number = car.call_number AND "
-          + "rent.user_id = ?";
+          + "rent.uid = ?";
       pstmt = conn.prepareStatement(sqlStatement);
       pstmt.setString(1, userID);
 
@@ -563,6 +563,7 @@ public class JavaSQL {
         System.out.println("End of Query");
     } catch (Exception exp) {
       System.out.println("[Error]: An matching search record is not found. The input does not exist in database.");
+      System.out.println("Exception: " + exp);
     }
   }
 
