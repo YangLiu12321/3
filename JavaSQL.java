@@ -295,6 +295,7 @@ public class JavaSQL {
           ps_produce.execute();
         }
       } catch (Exception ex) {
+          System.out.println("Exception: " + ex);
       }
 
       // car.txt: {call_number, name, manufacture, time_rent, ccid}
@@ -421,7 +422,7 @@ public class JavaSQL {
       columns = rs.getInt("count(*)");
     }
     catch (Exception ex){
-
+        
     }
     // Get searching criteria
     do {
@@ -478,7 +479,7 @@ public class JavaSQL {
         }
         if(found)
           continue;
-
+        
         resultSet[count][0] = callTemp;
         resultSet[count][1] = rs.getString("car_name");
         resultSet[count][2] = rs.getString("car_category_name");
@@ -489,7 +490,9 @@ public class JavaSQL {
 
         String sqlStatement_unreturn = "SELECT count(return_date) FROM rent WHERE return_date = '' AND call_number = ? group by call_number";
         PreparedStatement unreturnPstmt = conn.prepareStatement(sqlStatement_unreturn);
+        unreturnPstmt.setString(1, callTemp);
         ResultSet unreturnSet = unreturnPstmt.executeQuery();
+        
         if(unreturnSet.next()){
           int number = unreturnSet.getInt("count(return_date)");
           copyNumberSet[count] -= number;
@@ -502,7 +505,8 @@ public class JavaSQL {
           System.out.println("| " + resultSet[i][0] + " | " + resultSet[i][1] + " | " + resultSet[i][2] + " | " + resultSet[i][3] + " | " + copyNumberSet[i] + "  |");
       }
     } catch (Exception exp) {
-      System.out.println("[Error]: An matching search record is not found. The input does not exist in database.");
+//      System.out.println("[Error]: An matching search record is not found. The input does not exist in database.");
+        System.out.println("exception: " + exp);
     }
   }
 
