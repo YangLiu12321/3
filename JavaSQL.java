@@ -327,7 +327,7 @@ public class JavaSQL {
       pstmt.setString(2, result[0]);
       pstmt.setString(3, result[1]);
       pstmt.setString(4, result[3]);
-      if (result[4].equals("null"))
+      if (result[4].equals("NULL"))
         pstmt.setString(5, "");
       else
         pstmt.setString(5, result[4]);
@@ -621,7 +621,7 @@ public class JavaSQL {
       if (!rs_check.next()) {
         String sqlStatement_borrow;
         PreparedStatement pstmt_borrow;
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.now();
         /* Insert record */
         sqlStatement_borrow = "INSERT INTO rent (call_number, copy_number, uid, checkout_date, return_date) VALUES (?, ?, ?, ?, '')";
@@ -676,7 +676,7 @@ public class JavaSQL {
         /* return the car */
         String sqlStatement_return;
         PreparedStatement pstmt_return;
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate localDate = LocalDate.now();
         /* Update table */
         sqlStatement_return = "UPDATE rent " + "SET return_date = ? " + "WHERE uid = ? AND "
@@ -731,8 +731,8 @@ public class JavaSQL {
     PreparedStatement pstmt_unreturn;
     int returnCount = 0;
     try {
-      sqlStatement_unreturn = "SELECT uid, call_number, copy_number, checkout_date FROM " + "rent WHERE "
-          + "return_date = '' " + "ORDER BY checkout_date DESC;";
+      sqlStatement_unreturn = "SELECT * FROM " + "rent WHERE "
+          + "return_date = '' ";
       pstmt_unreturn = conn.prepareStatement(sqlStatement_unreturn);
 
       /* Printing the result to console */
@@ -742,9 +742,13 @@ public class JavaSQL {
       Boolean hasResult = false;
       while (rs_unreturn.next()) {
         String dateToCheck = rs_unreturn.getString("checkout_date");
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Boolean checkDate = sdf.parse(dateToCheck).before(sdf.parse(endDate));
-        checkDate = checkDate && sdf.parse(dateToCheck).after(sdf.parse(startDate));
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+//        System.out.println("dateToCheck: " + dateToCheck);
+//        System.out.println("endDate: " + endDate);
+//        System.out.println("startDate: " + startDate);
+        Boolean checkDate = sdf1.parse(dateToCheck).before(sdf2.parse(endDate));
+        checkDate = checkDate && sdf1.parse(dateToCheck).after(sdf2.parse(startDate));
         if(checkDate){
           hasResult = true;
           resultsInRange[returnCount][0] = rs_unreturn.getString("uid");
@@ -754,7 +758,7 @@ public class JavaSQL {
           returnCount += 1;
         }
       }
-      SimpleDateFormat checker = new SimpleDateFormat("dd/MM/yyyy");
+      SimpleDateFormat checker = new SimpleDateFormat("yyyy-MM-dd");
       for(int i=0; i<returnCount; i++){
         for(int j=i+1; j<returnCount; j++){
           if(checker.parse(resultsInRange[i][3]).before(checker.parse(resultsInRange[j][3]))){
