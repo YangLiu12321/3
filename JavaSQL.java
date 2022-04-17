@@ -299,14 +299,17 @@ public class JavaSQL {
       }
 
       // car.txt: {call_number, name, manufacture, time_rent, ccid}
-      ps_copy.setString(1, result[0]);
-      ps_copy.setString(2, result[1]);
+      
+      for (int i=0; i < Integer.parseInt(result[1]); i++){
+        ps_copy.setString(1, result[0]);
+        ps_copy.setString(2, Integer.toString(i));
+        ps_copy.execute();
+      }
       ps_car.setString(1, result[0]);
       ps_car.setString(2, result[2]);
       ps_car.setString(3, result[4]);
       ps_car.setString(4, result[5]);
       ps_car.setString(5, result[6]);
-      ps_copy.execute();
       ps_car.execute();
     }
     System.out.println("Data of car has been loaded successfully!\n");
@@ -619,6 +622,15 @@ public class JavaSQL {
       ResultSet rs_check = pstmt_check.executeQuery();
       
       if (!rs_check.next()) {
+        sqlStatement_check = "SELECT * FROM " + "copy WHERE " + "call_number = ? AND " + "copy_number = ? ";
+        pstmt_check = conn.prepareStatement(sqlStatement_check);
+        pstmt_check.setString(1, call_number);
+        pstmt_check.setInt(2, copy_number);
+        ResultSet exist_check = pstmt_check.executeQuery();
+        if (!exist_check.next()){
+            System.out.println("[Error]: No matching car!");
+            throw new Exception("No matching car!");
+        }
         String sqlStatement_borrow;
         PreparedStatement pstmt_borrow;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
