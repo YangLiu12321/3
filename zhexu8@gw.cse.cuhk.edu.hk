@@ -302,7 +302,7 @@ public class JavaSQL {
       
       for (int i=0; i < Integer.parseInt(result[1]); i++){
         ps_copy.setString(1, result[0]);
-        ps_copy.setInt(2, i);
+        ps_copy.setString(2, Integer.toString(i));
         ps_copy.execute();
       }
       ps_car.setString(1, result[0]);
@@ -328,7 +328,7 @@ public class JavaSQL {
       String[] result = data.split("\t");
       pstmt.setString(1, result[2]);
       pstmt.setString(2, result[0]);
-      pstmt.setInt(3, Integer.parseInt(result[1]));
+      pstmt.setString(3, result[1]);
       pstmt.setString(4, result[3]);
       if (result[4].equals("NULL"))
         pstmt.setString(5, "");
