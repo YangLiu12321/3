@@ -613,13 +613,33 @@ public class JavaSQL {
     /* Check the availablity of the car with callNumber and copyNumber */
     String sqlStatement_check;
     PreparedStatement pstmt_check;
+    
+    int max=0;
+    String userid=null;
+    int num=0;
     try {
+        sqlStatement_check = "SELECT max_cars, user.uid, COUNT(rent.return_date) as num  FROM user_category, user, rent WHERE user_category.ucid = user.user_category_id AND user.uid =  rent. uid AND user. uid = ? AND rent.return_date = ''";
+        pstmt_check = conn.prepareStatement(sqlStatement_check);
+        pstmt_check.setString(1, uid);
+        ResultSet rs_check = pstmt_check.executeQuery();
+        while(rs_check.next()) {
+            max = rs_check.getInt("max_cars");
+            userid = rs_check.getString("uid");
+            num = rs_check.getInt("num");
+        }
+  
+        if(userid==null){
+        }
+        else if(num>=max){
+            throw new Exception("This user has reached his maximum borrow capacity,no cars should be borrowed to the user");
+        }
+
       sqlStatement_check = "SELECT * FROM " + "rent WHERE " + "call_number = ? AND " + "copy_number = ? AND "
           + "return_date = ''";
       pstmt_check = conn.prepareStatement(sqlStatement_check);
       pstmt_check.setString(1, call_number);
       pstmt_check.setInt(2, copy_number);
-      ResultSet rs_check = pstmt_check.executeQuery();
+      rs_check = pstmt_check.executeQuery();
       
       if (!rs_check.next()) {
         sqlStatement_check = "SELECT * FROM " + "copy WHERE " + "call_number = ? AND " + "copy_number = ? ";
